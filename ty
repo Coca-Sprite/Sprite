@@ -1,0 +1,103 @@
+
+import discord
+from discord.ext import commands
+import time
+import random
+import asyncio
+client = commands.Bot(command_prefix='')
+
+client.event
+
+
+async def on_ready():
+	print('bot ready')
+
+
+@client.event
+async def on_message(message):
+
+	with open("log.txt", "a") as log:
+		log.write(
+		    f"{message.author} sent '{message.content}'' in {message.channel} channel\n"
+		)
+
+	message.content = message.content.casefold()
+	if (message.content.startswith('hello'.casefold())
+	    or message.content.startswith(
+	        "hi".casefold())) and message.content.endswith(
+	            "sfs bot".casefold()):
+		if message.author.name != client.user.name:
+			await message.channel.send(
+			    f" {random.choice(['hi','hello'])} {message.author.mention} i'm {client.user.mention} what can i do for you?"
+			)
+
+	elif message.content == 'hahaha':
+		await message.channel.send(
+		    "https://c.tenor.com/W6K5-GnKwFoAAAAM/laughing-spacex.gif")
+	await client.process_commands(message)
+
+
+@client.command()
+@commands.has_role("Admin")
+async def i_need_my_wife(ctx):
+
+	await ctx.channel.send(
+	    'https://c.tenor.com/WZscJqfZVAsAAAAM/hololive-mori.gif  Gotchu Homie!'
+	)
+
+
+@client.command()
+async def randnum(ctx, min, max):
+	await ctx.send(random.randint(int(min), int(max)))
+
+
+@client.command()
+async def 規則(ctx):
+	await ctx.send(
+	    "所有人都必須閱讀並遵守這些規則。我們保留隨時更改它的權利。(1)允許：1.無論背景如何，都要尊重其他成員。2.將您的消息發送到適當的渠道。3.在任何情況下都嚴禁使用任何形式的暴力。 侮辱，威脅，歧視，色情圖片等將導致制裁。4.禁止在特定區域做不必要的事(2)禁止：1.無故提及任何人。 僅在絕對必要的情況下才允許提及角色。2.充斥聊天，垃圾郵件。3.無論是什麼廣告也不要私下傳。（共享之前先詢問）4.披露個人信息。  （照片，地址，電話號碼，密碼...）5.暱稱，化身，狀態或動作與不和規則相反。6.有一個雙重帳戶。  (3)此規則不適用於工作人員無論您如何疑慮， deleted-role 及 deleted-role 都高於服務器的特定規則。規則隨時會改請持續關注"
+	)
+
+
+
+@client.command()
+async def wonderful(ctx):
+	await ctx.send('https://c.tenor.com/a_xGE8JnKc8AAAAM/zorbey.gif')
+
+
+@client.command()
+async def clear(m, amount=5):
+	if 'Admin' in str(m.author.roles) or 'Head Admin' in str(
+	    m.author.roles) or 'Assistant Admin' in str(m.author.roles):
+		deleted = await m.channel.purge(limit=amount + 1, check=clear)
+		mesdel = await m.channel.send(
+		    'Deleted {} message(s)'.format(len(deleted) - 1))
+		await asyncio.sleep(3)
+		await mesdel.delete()
+	else:
+		await m.channel.send(
+		    f"{m.author} 你不被允許使用")
+
+
+@client.command()
+async def ping(ctx):
+	await ctx.channel.send(f'ping {round(client.latency *1000)}ms')
+
+@client.command()
+async def mc(ctx):
+	await ctx.channel.send(f'IP：CocaSprite.aternos.me連接埠：26800')
+	
+@client.event
+async def on_member_join(member):
+	user = client.get_user(member)
+	await user.send(
+	    f"(member) 加入了伺服器'"
+	)
+
+
+@client.event
+async def on_member_remove(member):
+	channel = client.get_channel(825373877995700258)
+	channel.send(f'{member}離開了伺服器')
+
+
+client.run("ODI1Nzk3MTE2MjY4OTA0NDQ4.YGDJfw.1cfccoT0VatXQvJk9-shQe854Oo")
